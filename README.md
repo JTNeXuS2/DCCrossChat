@@ -67,5 +67,6 @@ During startup, the application makes a request to `http://junger.zzux.com` once
 
 To send messages from CE to Discord, use the PIPPI mod or similar mods that have their own webhook server, or use the mechanics previously published to create your own webhook server and send messages to your webhook in your mod.
 
+WINDOWS Binary exe
 Download link for on Google Drive: (https://drive.google.com/file/d/1Vx5RaSV1V7tybTTGkOo3d1rpL6j8Lqws/view?usp=sharing)
 VirusTotal: (https://www.virustotal.com/gui/file-analysis/YTk3MmYwZmVkOGVlNGJhZjA3Zjk4YWZmZTU1ZWEwOWE6MTcwNTI4NTIzNQ==)
