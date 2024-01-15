@@ -30,8 +30,7 @@ Screen: 🖥️👉 (https://media.discordapp.net/attachments/665952889755402240
 Fill in the `secur\config.ini` file with the servers to which messages from Discord should be sent. The `chat` parameter is optional and defaults to using the PIPPI chat.
 For the cautious ones, the config is stored locally and not transmitted to anyone. Access to the RCON port from external addresses can be closed using the standard Windows firewall or opened only for specific IP addresses (stores).
 
-template
-'''ini
+template ini
 ;[shortservname]
 ;host = address
 ;port = rcon port
@@ -48,7 +47,6 @@ host = junger.zzux.com
 port = 9780
 pass = 123456
 chat = 2
-'''
 
 Inserting images is supported if enabled in the PIPPI chat.
 Screens: 🖥️👉 (https://media.discordapp.net/attachments/1117875787601813665/1196271501515706489/image.png) and (https://media.discordapp.net/attachments/1117875787601813665/1196271956249563227/image.png)
