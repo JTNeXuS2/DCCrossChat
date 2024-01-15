@@ -30,7 +30,7 @@ Screen: 🖥️👉 (https://media.discordapp.net/attachments/665952889755402240
 Fill in the `secur\config.ini` file with the servers to which messages from Discord should be sent. The `chat` parameter is optional and defaults to using the PIPPI chat.
 For the cautious ones, the config is stored locally and not transmitted to anyone. Access to the RCON port from external addresses can be closed using the standard Windows firewall or opened only for specific IP addresses (stores).
 
-template ini
+template config.ini
 ;[shortservname]
 ;host = address
 ;port = rcon port
