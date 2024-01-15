@@ -1,4 +1,4 @@
-*- coding: utf-8 -*-
+## *- coding: utf-8 -*-
 ## -*- coding: cp1251 -*-
 import discord
 import os
