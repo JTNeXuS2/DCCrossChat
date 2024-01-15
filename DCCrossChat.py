@@ -21,7 +21,7 @@ lookchanel = []
 fname = 'secur/Clist.txt'
 ftoken = 'secur/Token.txt'
 flic = 'secur/lickey.txt'
-seed = "discordcrosschatpub"
+seed = "PUBLICSEED"
 # Остановить выполнение кода и вывести сообщение остановки
 def stop_execution():
     print("Press Enter to Exit...")
