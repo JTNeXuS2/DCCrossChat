@@ -68,3 +68,7 @@ To send messages from CE to Discord, use the PIPPI mod or similar mods that have
 WINDOWS Binary exe
 Download link for on Google Drive: (https://drive.google.com/file/d/1Vx5RaSV1V7tybTTGkOo3d1rpL6j8Lqws/view?usp=sharing)
 VirusTotal: (https://www.virustotal.com/gui/file-analysis/YTk3MmYwZmVkOGVlNGJhZjA3Zjk4YWZmZTU1ZWEwOWE6MTcwNTI4NTIzNQ==)
+
+### Donate for me
+https://yoomoney.ru/to/4100116619431314
+https://fkwallet.com  ID: F111999663
