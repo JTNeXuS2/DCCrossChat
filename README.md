@@ -69,6 +69,8 @@ WINDOWS Binary exe
 Download link for on Google Drive: (https://drive.google.com/file/d/1Vx5RaSV1V7tybTTGkOo3d1rpL6j8Lqws/view?usp=sharing)
 VirusTotal: (https://www.virustotal.com/gui/file-analysis/YTk3MmYwZmVkOGVlNGJhZjA3Zjk4YWZmZTU1ZWEwOWE6MTcwNTI4NTIzNQ==)
 
-### Donate for me
-https://yoomoney.ru/to/4100116619431314
-https://fkwallet.com  ID: F111999663
+#### find me on discord [![Discord](https://discordapp.com/api/guilds/626106205122592769/widget.png?style=shield)](https://discord.gg/qYmBmDR)
+#### Donate for me
+#### [yoomoney](https://yoomoney.ru/to/4100116619431314)
+https://fkwallet.io  ID: F7202415841873335
+#### [boosty](https://boosty.to/_illidan_)
