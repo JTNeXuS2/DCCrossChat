@@ -1,6 +1,6 @@
-## *- coding: utf-8 -*-
+## -*- coding: utf-8 -*-
 ## -*- coding: cp1251 -*-
-import discord
+import disnake as discord
 import os
 import sys
 import requests
@@ -13,8 +13,8 @@ import asyncio
 import configparser
 import hashlib
 
-from discord.ext import commands
-from discord import Intents
+from disnake.ext import commands
+from disnake import Intents
 
 urlhook = "http://junger.zzux.com/webhook/prcon.php"
 lookchanel = []
@@ -143,7 +143,7 @@ def read_flic():
   return public_key
 public_key = read_flic()
 if len(str(public_key)) == 0:
-  print('ERROR read public_key\nFill secur\lickey.txt')
+  print(f"ERROR read public_key\nFill secur\\lickey.txt")
 print (' public key: ' + str(public_key))
 
 url = 'http://junger.zzux.com/webhook/lic.php'
@@ -193,13 +193,15 @@ async def read_servers():
     print('Server list is Empty!\nFill in the list of servers config secur/config.ini')
   return servers
 
+
 intents = discord.Intents.default()
 intents = discord.Intents().all()
 prefix= ''
 words = ['!help']
 client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
-client = discord.Client(command_prefix=prefix, intents=intents) #инициализируем клиента с префиксом
-bot = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True) #инициализируем бота с префиксом
+bot = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
+
+
 
 def strip_rcon_log(response, server):
     if response.lower() not in ['ok', 'ok.']:
@@ -254,6 +256,7 @@ async def compile_send(rank, color, dname, dmessage):
                command = 'ast chat "global" '+dname+':'+dmessage
            case _:
                command = 'globallink cmd=globalchat&data='+ rank + '|' + color + '|' + dname + '|' + dmessage
+      print(f"Command: {command}")
       await send_rcon_command(host, port, rcon_password, command, server)
 
 async def show_help(message):
@@ -281,22 +284,6 @@ async def getServersName():
     for guild in client.guilds:
         id = guild.name
         print('Connect to ' + str(id))
-
-async def replaceIDtoName(id, name, quote):
-    for guild in client.guilds:
-        string_b = quote.replace(str(id), str(name))
-
-#получим списки имен/ид участников
-async def getServersLID(message):
-    memberList = []
-    memberID = []
-    memberlid = {}
-    for guild in client.guilds:
-        for member in guild.members:
-            memberList.append(str(member.name))
-            memberID.append(str(member.id))
-            memberlid[str(member.id)] = str(member.name)
-    return memberID, memberList, memberlid
 
 @client.event
 async def on_message(message):
@@ -340,37 +327,74 @@ async def on_message(message):
     if message.content.startswith('/lookhere'):
       print('Channel is already being tracked >>> ' + str(message.channel.id))
       await message.channel.send('Channel is already being tracked ' + str(message.channel.id))
-    quote = message.content
-    attach = ''
-    chars = ['<@$', '<@&', '<@']
-    if quote.find(r'<@!||<@&||<@', 0, 500):
-      for item in chars:
-        quote = re.sub(r'' + item + '', r'<@!', quote)
-      id, name, memberlid = await getServersLID(message)
 
-      for key, value in memberlid.items():
-          quote = quote.replace('<@!' + key + '>', value)
-    rank = "Discord"													#вместо ранга подставим источник
-    color = "ffffff"													#цвет сообщений в игре
+    # Инициализация message и заменяем ид на имена
+    quote = message.content
+    
+    # Замена ид автора на имя
+    dname = message.author.display_name or message.author.global_name or message.author.name
+    # Замена упоминаний пользователей: <@user_id> или <@!user_id> на имя пользователя
+    for user in message.mentions:
+        name_to_use = user.display_name or user.global_name or user.name
+        quote = re.sub(rf'<@!?{user.id}>', f'@{name_to_use}', quote)
+    # Замена упоминаний ролей: <@&role_id> на @role_name
+    for role in message.role_mentions:
+        quote = re.sub(rf'<@&{role.id}>', f'@{role.name}', quote)
+    # Замена упоминаний каналов: <#channel_id> на #channel_name
+    for channel in message.channel_mentions:
+        quote = re.sub(rf'<#{channel.id}>', f'#{channel.name}', quote)
+
+    # Оборачиваем ссылки на изображения в тексте
+    image_extensions = ['png', 'jpg', 'gif', 'jpeg', 'apng', 'webm', 'webp']
+    url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
+    def is_image_url(url):
+        clean_url = re.split(r'[\?#]', url)[0]
+        _, ext = os.path.splitext(clean_url.lower())
+        return ext[1:] in image_extensions
+    parts = []
+    last_end = 0
+    for match in re.finditer(url_pattern, quote):
+        start, end = match.span()
+        url = match.group(0)
+        parts.append(quote[last_end:start])
+        if is_image_url(url):
+            parts.append(f'<imgurl={url}>')
+        else:
+            parts.append(url)
+        last_end = end
+    parts.append(quote[last_end:])
+    quote = ''.join(parts)
+
+    # Инициализация rank и color
+    rank = "Discord"
+    color = "ffffff"
     color = str(message.author.color).replace("#", "")
 
-    dname = message.author.display_name									#блок пулочения приоритетного имени
-    if message.author.display_name is None:
-      dname = message.author.global_name
-      if message.author.global_name is None:
-        dname = message.author.name
-    dname = unicodedata.normalize('NFKD', dname).encode('utf-8', 'ignore').decode("utf-8")
-	
-    dmessage = quote													#сообщение
-    if len(message.attachments) > 0:									#если есть вложение прикрепим
-      attach = message.attachments[0].url.split('?')[0]
-      if attach.split('.')[-1].lower() in ['png', 'jpg', 'gif', 'jpeg', 'apng', 'webm', 'webp']:
-        dmessage = quote + ' <imgurl=' + attach + '>'					#вложения
+    # Инициализация сообщения с quote
+    dmessage = quote
+    image_count = 0
+    for attachment in message.attachments:
+        if image_count >= 3:
+            break
+        attach = attachment.url.split('?')[0]
+        if attach.split('.')[-1].lower() in image_extensions:
+            # Сокращение ссылки, если длина > 99 символов
+            short_url = attachment.url
+            if len(short_url) > 99:
+                try:
+                    response = requests.get(f'http://tinyurl.com/api-create.php?url={short_url}')
+                    if response.status_code == 200:
+                        short_url = response.text.strip()
+                except:
+                    pass  # В случае ошибки оставляем оригинальную ссылку
+
+            dmessage += f" <imgurl={short_url}>"
+            image_count += 1
+    # Нормализация сообщения
     dmessage = unicodedata.normalize('NFKD', dmessage).encode('utf-8', 'ignore').decode("utf-8")
+    dname = unicodedata.normalize('NFKD', dname).encode('utf-8', 'ignore').decode("utf-8")
     await compile_send(rank, color, dname, dmessage)
 
-
-#bot.run(TOKEN)
 try:
     client.run(TOKEN)
 except discord.errors.LoginFailure:
@@ -381,5 +405,4 @@ except discord.ConnectionClosed:
     print(' ConnectionClosed Discord API')
 except discord.errors.PrivilegedIntentsRequired:
     print(' Privileged Intents Required\n See Privileged Gateway Intents https://discord.com/developers/applications/ \nscreenshot http://junger.zzux.com/webhook/guide/Privileged_Gateway_Intents.png')
-	
 	
